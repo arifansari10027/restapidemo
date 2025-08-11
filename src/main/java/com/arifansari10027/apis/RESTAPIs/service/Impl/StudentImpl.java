@@ -3,6 +3,7 @@
 package com.arifansari10027.apis.RESTAPIs.service.Impl;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -67,8 +68,19 @@ public class StudentImpl implements Studentservice {
                 return modelMapper.map(student, StudentDto.class);
     }
 
-   
+    @Override
+    public StudentDto updatePartialStudent(int id, Map<String, Object> updates) {
+        Student student =  studentrepo.findById(id).orElseThrow(() -> new IllegalArgumentException("Student not found"));
 
-    
+        updates.forEach((field, value) -> {
+            switch (field) {
+                case "email" : student.setEmail((String) value);
+                break;
 
+                default: throw new IllegalArgumentException("Field is not supported");
+            }
+        });
+        Student savedStudent = studentrepo.save(student);
+        return modelMapper.map(student, StudentDto.class);
+    }
 }
