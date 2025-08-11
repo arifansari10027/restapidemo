@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+
 
 
 @RestController // This annotation is made up from Response body and controller annotations. It returns the output in JSON Format
@@ -57,5 +59,10 @@ public class StudentController {
     public ResponseEntity<Void> deleteStudent(@PathVariable int id) {
         studentservice.deleteStudentById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<StudentDto> updateStudent(@PathVariable int id, @RequestBody AddStudentRequestDto addStudentRequestDto) {
+        return ResponseEntity.ok(studentservice.updateStudent(id, addStudentRequestDto));
     }
 }
